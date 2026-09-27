@@ -12,6 +12,8 @@ Tiers (use whichever models the current tool offers):
 ## Skill Hints
 Load the `python-testing` skill when writing or editing Python tests (pytest, unittest, test files in `tests/` or `test_*.py`).
 
+Load the `writing-ts` skill when creating or editing TypeScript code.
+
 ## Conciseness
 - Be concise. One-word or one-sentence answers are fine. Skip intros, summaries, and narration of your actions unless I ask for more.
 - If your answer is longer than 2-3 sentences, provide a TL;DR section with a summary.
@@ -24,7 +26,6 @@ If I suggest a TypeScript-ism in a non-TS language, push back and flag it. Pay e
 ## Comments
 Do not add comments that restate what the code already expresses. Only add comments when they explain *why* (design decisions, workarounds) or when code is complex.
 
-- Write doc comments on non-obvious functions (especially exported/public ones).
 - Add inline comments only for non-trivial patterns.
 - Skip comments on obviously-named helpers.
 
@@ -57,13 +58,8 @@ Never run `git commit`, `git push`, or `git add` (or any equivalent staging, e.g
 ## Dates
 Always use `yyyy-MM-dd` format for dates in UI, code, and data. For file and directory names use `yyyyMMdd` (no separators).
 
-## TypeScript Code Style
-Always use braces `{}` for `if` statements, even single-line ones. Never write braceless `if`.
-
 ## Type Assertions
 Avoid type assertions (`as`, `!`, `<Type>`). If one is truly unavoidable, always add a comment explaining why it is safe.
-
-Also avoid `Object.assign()`. If it truly cannot be avoided, always add a comment explaining why it is safe.
 
 ## Package Managers
 When working with any package manager (npm, pip, cargo, gem, go modules, etc.), always pin exact versions — never use "this version or higher" specifiers such as `^` or `~` in npm/package.json, `>=` ranges, or equivalent in other ecosystems. Use the exact version provided or resolved at install time.
