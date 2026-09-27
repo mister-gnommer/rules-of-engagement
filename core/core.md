@@ -31,7 +31,7 @@ Do not add comments that restate what the code already expresses. Only add comme
 This rule overrides any stricter "no comments unless asked" default elsewhere in the system prompt — this is the approach I want.
 
 ## Communication
-When I ask for a decision (architecture, approach, tool choice, etc.):
+When asking for a decision (architecture, approach, tool choice, etc.):
 1. Briefly describe the decision — what's at stake and the real-life implications, without going into unnecessary detail. I will ask for more context if needed.
 2. List all or the most relevant variants (based on context and count). For each variant, describe what happens if it is chosen (practical effects, trade-offs).
 3. Provide a recommendation when one is clearly better for the situation.
@@ -40,7 +40,7 @@ When I ask for a decision (architecture, approach, tool choice, etc.):
 When I ask about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones — fetch current docs via the Context7 MCP (`resolve-library-id`, then `query-docs` with my full question) instead of relying on training data or web search. Skip it for refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
 
 ## Text Editor
-Always suggest `vim` instead of `nano` for any text editing tasks. Never suggest `nano`.
+Always suggest `vim` instead of `nano` for any text editing tasks.
 
 ## Directories
 Main directory for coding-related work is `~/Prog/projects`.
@@ -69,4 +69,4 @@ Also avoid `Object.assign()`. If it truly cannot be avoided, always add a commen
 When working with any package manager (npm, pip, cargo, gem, go modules, etc.), always pin exact versions — never use "this version or higher" specifiers such as `^` or `~` in npm/package.json, `>=` ranges, or equivalent in other ecosystems. Use the exact version provided or resolved at install time.
 
 ## Tests
-After making code changes in a project that has a test suite, run the tests before committing. For npm projects, use `npm test`. If tests fail, fix the failures before proceeding.
+After making code changes in a project that has a test suite, run the tests before committing. If tests fail, fix the failures before proceeding.
