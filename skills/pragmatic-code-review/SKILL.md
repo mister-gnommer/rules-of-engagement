@@ -1,6 +1,6 @@
 ---
 name: pragmatic-code-review
-ver: 1
+ver: 2
 description: Pragmatic, business-focused code review — safety-strict, style-lenient. Use when the user asks for a review of code they just wrote or changed, or invokes /pragmatic-code-review. Produces a numbered findings list ending in a merge verdict.
 ---
 
@@ -50,10 +50,23 @@ When the diff or unstaged changes include files under `openspec/`, treat them as
 - Read `openspec/changes/*/proposal.md` for the motivation behind the change.
 - **Do not review, critique, or include findings about the OpenSpec artifacts themselves** — the user has already reviewed those. Only use them as context to inform the code review.
 
+### Generic heuristics
+
+Generic questions to keep in mind while reading. These catch whole classes of problems without listing cases, and apply to any language or stack:
+
+- **Reinvention** — Does this hand-roll something the language, runtime, or an already-installed dependency provides (stream reading, retry, debounce, dedup, deep clone, date formatting, arg parsing)? If so, name the built-in you'd use instead. If you can't name one, drop the finding.
+- **Shortest path** — Would a senior dev on this exact stack write it this way, or is there a shorter idiomatic form?
+- **Deliberateness** — Does an unusual construct look intentional, or accidental? Odd loop shapes and manual control flow where iterators exist read as accidental and cost the next reader time.
+- **Local consistency** — Does the diff solve a problem differently from how the same problem is already solved elsewhere in the repo?
+
+Severity: reinvention is **[SUGGESTION]** by default, escalating to **[BUG]** only when the hand-rolled version is also wrong (unbounded, misses errors, no backpressure). The others are **[MINOR]** or **[SUGGESTION]**.
+
 ### What not to nitpick
 
+These are demoted, not ignored: still look for them, but they never affect the verdict.
+
 - Minor naming preferences (unless truly confusing)
-- Style and formatting that a linter should catch — just note once that a linter could be configured if there isn't one
+- Style and formatting that a linter should catch — file as **[MINOR]** and note once that a linter could be configured if there isn't one
 - Slight architectural imperfections that don't affect outcomes
 - Theoretical extensibility that isn't needed yet
 - Test coverage for trivial code
@@ -69,7 +82,7 @@ When the diff or unstaged changes include files under `openspec/`, treat them as
 
 3. **Identify blockers** — Issues that would cause bugs, data loss, or failures in production. Label **[BUG]** or **[RELIABILITY]**.
 
-4. **Call out important improvements** — Meaningful suggestions that improve quality without being pedantic. Label **[SUGGESTION]**.
+4. **Call out important improvements** — Meaningful suggestions that improve quality without being pedantic. Label **[SUGGESTION]**. Run the generic heuristics here.
 
 5. **Optional/minor notes** — Lightweight observations. Label **[MINOR]** and make clear these are take-it-or-leave-it. Keep this section short.
 
