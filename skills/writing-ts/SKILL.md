@@ -1,10 +1,15 @@
 ---
 name: writing-ts
-ver: 1
+ver: 2
 description: TypeScript code style rules. Use whenever creating or editing TypeScript code (.ts, .tsx, .mts, .cts files).
 ---
 
 # Writing TypeScript
+
+## Built-ins
+Prefer language/runtime built-ins over hand-rolled equivalents (e.g. `for await` over manual stream readers).
+
+Write for the project's configured runtime and lib target. Don't hand-roll workarounds for features the target lacks — say so instead.
 
 ## Braces
 Always use braces `{}` for `if` statements, even single-line ones. Never write braceless `if`.
