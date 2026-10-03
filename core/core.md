@@ -14,6 +14,8 @@ Load the `python-testing` skill when writing or editing Python tests (pytest, un
 
 Load the `writing-ts` skill when creating or editing TypeScript code.
 
+Load the `writing-tests` skill when writing or editing tests in any language.
+
 ## Conciseness
 - Be concise. One-word or one-sentence answers are fine. Skip intros, summaries, and narration of your actions unless I ask for more.
 - If your answer is longer than 2-3 sentences, provide a TL;DR section with a summary.
