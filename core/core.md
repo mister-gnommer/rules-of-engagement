@@ -18,7 +18,7 @@ Load the `writing-tests` skill when writing or editing tests in any language.
 
 ## Conciseness
 - Be concise. One-word or one-sentence answers are fine. Skip intros, summaries, and narration of your actions unless I ask for more.
-- If your answer is longer than 2-3 sentences, provide a TL;DR section with a summary.
+- If your answer is longer than 2-3 sentences, end it with a TL;DR section summarizing it. The TL;DR always goes last.
 
 ## Language-Specific Thinking
 When working in a language that is not TypeScript, do not apply TypeScript idioms, patterns, or style. Write idiomatic code for the target language, not TypeScript translated into that language's syntax.
