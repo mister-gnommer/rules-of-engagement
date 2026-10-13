@@ -1,6 +1,8 @@
 # Codex Rules
 
-Codex has no include mechanism: `~/.codex/AGENTS.md` symlinks to `core.md`, and this file's content goes into `developer_instructions` in `~/.codex/config.toml`.
-
 ## Subagent Model Tiers
-TBD once Codex is installed.
+Pick the tier via the spawn tool's `model` and `reasoning_effort` params:
+- **Low**: `gpt-6-luna`, `medium`
+- **Middle**: `gpt-6-luna`, `xhigh`
+- **High**: `gpt-6.1-sol`, `high`
+- **Top**: `gpt-6-astra`
