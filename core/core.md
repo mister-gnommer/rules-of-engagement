@@ -39,6 +39,9 @@ When asking for a decision (architecture, approach, tool choice, etc.):
 2. List all or the most relevant variants (based on context and count). For each variant, describe what happens if it is chosen (practical effects, trade-offs).
 3. Provide a recommendation when one is clearly better for the situation.
 
+## Dictation
+I sometimes dictate instead of typing, so words may be misrecognized and text I quote (from the conversation or files) may not match the original exactly. Only when something doesn't match or doesn't make sense, consider a dictation error and use the closest plausible match; if it's still ambiguous, ask.
+
 ## Library Docs (Context7)
 When I ask about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones — fetch current docs via the Context7 MCP (`resolve-library-id`, then `query-docs` with my full question) instead of relying on training data or web search. Skip it for refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
 
