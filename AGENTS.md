@@ -4,12 +4,15 @@
 
 This repo, even if public, is used by the creator mainly as a way to coordinate
 and sync agent setup among different places (work/priv laptop, different
-projects and harnesses). It holds two things:
+projects and harnesses). It holds three things:
 
 - `skills/` — skills, installed and updated with `npx skills`
   (`npx skills add mister-gnommer/rules-of-engagement`).
 - `core/` — global always-applied rules, read from a local clone at
   `~/Prog/projects/rules-of-engagement` (never fetched from the web).
+- `skills-list/skills.md` — third-party skills the creator uses everywhere.
+  Read only by the `sync-setup` skill from the local clone; kept outside
+  `skills/` so installing `sync-setup` doesn't push this list on anyone.
 
 ## core/ layout
 

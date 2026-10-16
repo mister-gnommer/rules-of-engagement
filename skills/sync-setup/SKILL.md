@@ -1,7 +1,7 @@
 ---
 name: sync-setup
-ver: 1
-description: Syncs this machine's core rules wiring with the rules-of-engagement repo and updates all installed skills. Use only when the user invokes /sync-setup.
+ver: 2
+description: Syncs this machine's core rules wiring with the rules-of-engagement repo, updates all installed skills, and optionally installs the user's listed third-party skills. Use only when the user invokes /sync-setup.
 disable-model-invocation: true
 ---
 
@@ -60,13 +60,28 @@ Only update what's already installed. Never add or remove skills in this step.
    - in the repo but not installed,
    - installed but gone from the repo.
 
-## 4. Report
+## 4. Skills list
+
+Skip this step silently if `$REPO/skills-list/skills.md` doesn't exist. It's the repo owner's personal list of third-party skills (`name | source` rows); skills from `$REPO/skills/` aren't on it.
+
+Compare it with the installed skills (lock-file entries plus folders in `~/.agents/skills/`), leaving out skills from `$REPO/skills/`. Note for the report:
+
+- on the list but not installed,
+- installed but not on the list. Take the source from the lock file. If the skill isn't in the lock file (installed by hand), say so; the user has to provide its source,
+- installed from a different source than the list says.
+
+Don't install anything or edit the list in this step.
+
+## 5. Report
 
 Keep it short. Include:
 
 - a table of what was checked, what changed, and what was left as-is (and why),
 - anything waiting on the user: unpushed changes, questions you skipped,
 - skill mismatches from step 3. Once everything else is done, ask whether to install the missing ones (`npx skills add mister-gnommer/rules-of-engagement -g -y -s <names...> -a <agents...>`, with agents taken from `lastSelectedAgents` in the lock file) or remove the stale ones (`npx skills remove -g -y -s <names...>`). Default: leave them as they are.
+- skills-list differences from step 4. Once everything else is done, ask:
+  - whether to install the missing ones: one `npx skills add <source> -g -y -s <names...> -a <agents...>` per source, agents as above. Default: skip, since not every machine needs every skill.
+  - whether to add the unlisted ones to `$REPO/skills-list/skills.md`. If yes, add the rows (keep the table sorted) and leave the change uncommitted; mention it needs a commit and push.
 - reload notes:
   - Claude Code picks up rules on a new session or `/compact`, and skills on a new session.
   - OpenCode picks up rules on the next request, and skills on restart.
