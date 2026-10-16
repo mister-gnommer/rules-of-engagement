@@ -67,7 +67,9 @@ Always use `yyyy-MM-dd` format for dates in UI, code, and data. For file and dir
 Avoid type assertions (`as`, `!`, `<Type>`). If one is truly unavoidable, always add a comment explaining why it is safe.
 
 ## Package Managers
-When working with any package manager (npm, pip, cargo, gem, go modules, etc.), always pin exact versions — never use "this version or higher" specifiers such as `^` or `~` in npm/package.json, `>=` ranges, or equivalent in other ecosystems. Use the exact version provided or resolved at install time.
+When adding or updating project dependencies (npm, pip, cargo, gem, go modules, etc.), always pin exact versions — never use "this version or higher" specifiers such as `^` or `~` in npm/package.json, `>=` ranges, or equivalent in other ecosystems. Use the exact version provided or resolved at install time.
+
+This does not apply to global/system installs (dnf, apt, brew, `npm i -g`, `pipx`, etc.): don't pin or look up versions for those; I set their policies myself.
 
 ## Tests
 After making code changes in a project that has a test suite, run the tests before committing. If tests fail, fix the failures before proceeding.
