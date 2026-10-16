@@ -1,6 +1,6 @@
 ---
 name: transcribe-audio
-ver: 1
+ver: 2
 description: Transcribe a local audio or video file (mp3, m4a, wav, ogg, flac, mp4, mov, webm, ...) to text, fully offline, using faster-whisper. Use when the user points at a recording and asks to transcribe it, get a transcript, subtitles (srt/vtt), or "what is said in this file". Works on macOS and Linux.
 ---
 

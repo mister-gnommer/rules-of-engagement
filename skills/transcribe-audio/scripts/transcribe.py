@@ -2,6 +2,8 @@
 # requires-python = ">=3.9"
 # dependencies = [
 #     "faster-whisper==1.2.1",
+#     # faster-whisper 1.2.1 passes an argument PyAV 19 no longer accepts.
+#     "av==16.0.1",
 # ]
 # ///
 """Transcribe an audio or video file to text with faster-whisper.
