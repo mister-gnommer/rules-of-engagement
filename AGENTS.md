@@ -19,7 +19,7 @@ projects and harnesses). It holds three things:
 - `core.md` — tool-agnostic rules. Word them without naming a tool
   ("the agent", not "Claude"). Keep it tight: length dilutes the rules.
 - `claude.md`, `codex.md` — per-tool overlays, only for rules that really
-  differ between tools (session tracking, ...).
+  differ between tools (subagent model tiers, ...).
 
 OpenCode has no overlay: v2 loads only one global file and has no include
 mechanism (the `instructions` key in `opencode.json` is parsed but not loaded
