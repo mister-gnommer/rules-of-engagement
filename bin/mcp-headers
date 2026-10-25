@@ -1,0 +1,15 @@
+#!/bin/sh
+# Prints a bearer auth header from the OS keyring, so MCP tokens never sit in
+# agent configs. Used as Claude Code's headersHelper and Codex's http_headers_helper.
+set -eu
+service=${1:?usage: mcp-headers <keyring-service>}
+case $(uname) in
+  Darwin) token=$(security find-generic-password -s "$service" -w) ;;
+  *)
+    # Codex runs helpers with a scrubbed env; secret-tool needs the session bus.
+    : "${DBUS_SESSION_BUS_ADDRESS:=unix:path=/run/user/$(id -u)/bus}"
+    export DBUS_SESSION_BUS_ADDRESS
+    token=$(secret-tool lookup service "$service")
+    ;;
+esac
+printf '{"Authorization":"Bearer %s"}\n' "$token"

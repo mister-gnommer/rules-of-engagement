@@ -4,19 +4,24 @@
 
 This repo, even if public, is used by the creator mainly as a way to coordinate
 and sync agent setup among different places (work/priv laptop, different
-projects and harnesses). It holds three things:
+projects and harnesses). It holds:
 
 - `skills/` — skills, installed and updated with the `skills` CLI
   (`skills add mister-gnommer/rules-of-engagement`).
 - `core/` — global always-applied rules, read from a local clone at
   `~/Prog/projects/rules-of-engagement` (never fetched from the web).
-- `skills-list/skills.md` — third-party skills the creator uses everywhere.
-  Read only by the `sync-setup` skill from the local clone; kept outside
-  `skills/` so installing `sync-setup` doesn't push this list on anyone.
+- `lists/` — what the creator uses everywhere: third-party skills
+  (`skills.md`) and MCP servers (`mcps.md`). Read only by the `sync-setup`
+  skill from the local clone; kept outside `skills/` so installing
+  `sync-setup` doesn't push these lists on anyone.
+- `bin/` — helper scripts, symlinked into `~/.local/bin`. `mcp-headers`
+  feeds MCP tokens from the OS keyring to Claude Code and Codex, so tokens
+  never sit in agent configs. OpenCode can't run a helper; it reads tokens
+  from env vars set by an `opencode()` shell wrapper (terminal launches only).
 
 ## tooling
 
-CLIs (`skills`, ...) are installed globally at pinned versions
+CLIs (`skills`, `add-mcp`, ...) are installed globally at pinned versions
 (`npm i -g skills@<ver> --before=<yyyy-MM-dd>`) and called directly, never
 via `npx`. `npx` resolves the latest release on every run, so a compromised
 publish would run on the next sync; a global install freezes the version
