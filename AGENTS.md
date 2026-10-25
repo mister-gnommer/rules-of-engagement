@@ -6,13 +6,27 @@ This repo, even if public, is used by the creator mainly as a way to coordinate
 and sync agent setup among different places (work/priv laptop, different
 projects and harnesses). It holds three things:
 
-- `skills/` — skills, installed and updated with `npx skills`
-  (`npx skills add mister-gnommer/rules-of-engagement`).
+- `skills/` — skills, installed and updated with the `skills` CLI
+  (`skills add mister-gnommer/rules-of-engagement`).
 - `core/` — global always-applied rules, read from a local clone at
   `~/Prog/projects/rules-of-engagement` (never fetched from the web).
 - `skills-list/skills.md` — third-party skills the creator uses everywhere.
   Read only by the `sync-setup` skill from the local clone; kept outside
   `skills/` so installing `sync-setup` doesn't push this list on anyone.
+
+## tooling
+
+CLIs (`skills`, ...) are installed globally at pinned versions
+(`npm i -g skills@<ver> --before=<yyyy-MM-dd>`) and called directly, never
+via `npx`. `npx` resolves the latest release on every run, so a compromised
+publish would run on the next sync; a global install freezes the version
+until it's upgraded on purpose, after reviewing the new release. `--before`
+keeps transitive deps off fresh (not yet vetted) releases too.
+
+This only pins the CLIs. `skills update` still pulls the latest content of
+third-party skills, which agents then follow — review those diffs.
+
+Under nvm, global packages are per Node version: reinstall after switching.
 
 ## core/ layout
 
@@ -41,7 +55,7 @@ clone breaks them, as does changing the absolute `@` path in `claude.md`.
 ## versioning
 
 No tags/semver: a new version is any pushed commit changing a skill folder.
-`npx skills` detects updates via folder hashes; git history is the changelog.
+`skills` detects updates via folder hashes; git history is the changelog.
 
 ### `ver` field in header
 

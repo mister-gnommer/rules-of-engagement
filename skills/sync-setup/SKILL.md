@@ -1,6 +1,6 @@
 ---
 name: sync-setup
-ver: 2
+ver: 3
 description: Syncs this machine's core rules wiring with the rules-of-engagement repo, updates all installed skills, and optionally installs the user's listed third-party skills. Use only when the user invokes /sync-setup.
 disable-model-invocation: true
 ---
@@ -24,7 +24,7 @@ If none of these works, ask the user where the clone is. Don't search the disk o
 - `git fetch`, then check `git status`.
 - **Behind remote, clean tree** → `git pull --ff-only`.
 - **Behind and dirty, or diverged** → stop and ask.
-- **Unpushed commits or uncommitted changes** → note it for the report. `npx skills` installs from GitHub, so skill changes don't reach any machine (including this one) until they're pushed. Core changes reach this machine right away when it uses symlinks.
+- **Unpushed commits or uncommitted changes** → note it for the report. `skills` installs from GitHub, so skill changes don't reach any machine (including this one) until they're pushed. Core changes reach this machine right away when it uses symlinks.
 - **Skill folders with unpushed changes whose `ver` didn't change** → flag them (repo rule: one bump per commit).
 
 ## 2. Core rules wiring
@@ -54,7 +54,9 @@ Extra checks:
 
 Only update what's already installed. Never add or remove skills in this step.
 
-1. `npx skills update -g -y` updates every installed skill, whatever its source.
+The `skills` CLI must be a global install (`command -v skills`). Never fall back to `npx`: it runs the latest release, so a compromised publish would run unreviewed. If it's missing (new machine, or a new Node version under nvm), stop this step and ask the user to install a pinned version: `npm i -g skills@<ver> --before=<yyyy-MM-dd>`. Don't upgrade it on your own; if `npm view skills version` is newer than `skills --version`, mention it in the report.
+
+1. `skills update -g -y` updates every installed skill, whatever its source.
 2. Spot-check one changed skill: its `ver` in `~/.agents/skills/<name>/SKILL.md` should match the pushed repo version.
 3. Compare the folders in `$REPO/skills/` with the lock-file entries (`~/.agents/.skill-lock.json`) whose `source` is `mister-gnommer/rules-of-engagement`. Note any mismatch for the report:
    - in the repo but not installed,
@@ -78,9 +80,9 @@ Keep it short. Include:
 
 - a table of what was checked, what changed, and what was left as-is (and why),
 - anything waiting on the user: unpushed changes, questions you skipped,
-- skill mismatches from step 3. Once everything else is done, ask whether to install the missing ones (`npx skills add mister-gnommer/rules-of-engagement -g -y -s <names...> -a <agents...>`, with agents taken from `lastSelectedAgents` in the lock file) or remove the stale ones (`npx skills remove -g -y -s <names...>`). Default: leave them as they are.
+- skill mismatches from step 3. Once everything else is done, ask whether to install the missing ones (`skills add mister-gnommer/rules-of-engagement -g -y -s <names...> -a <agents...>`, with agents taken from `lastSelectedAgents` in the lock file) or remove the stale ones (`skills remove -g -y -s <names...>`). Default: leave them as they are.
 - skills-list differences from step 4. Once everything else is done, ask:
-  - whether to install the missing ones: one `npx skills add <source> -g -y -s <names...> -a <agents...>` per source, agents as above. Default: skip, since not every machine needs every skill.
+  - whether to install the missing ones: one `skills add <source> -g -y -s <names...> -a <agents...>` per source, agents as above. Default: skip, since not every machine needs every skill.
   - whether to add the unlisted ones to `$REPO/skills-list/skills.md`. If yes, add the rows (keep the table sorted) and leave the change uncommitted; mention it needs a commit and push.
 - reload notes:
   - Claude Code picks up rules on a new session or `/compact`, and skills on a new session.
