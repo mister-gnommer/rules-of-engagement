@@ -23,13 +23,14 @@ projects and harnesses). It holds:
 
 CLIs (`skills`, `add-mcp`, ...) are installed globally at pinned versions
 (`npm i -g skills@<ver> --before=<yyyy-MM-dd>`) and called directly, never
-via `npx`. `npx` resolves the latest release on every run, so a compromised
-publish would run on the next sync; a global install freezes the version
-until it's upgraded on purpose, after reviewing the new release. `--before`
-keeps transitive deps off fresh (not yet vetted) releases too.
+via `npx`. Without a global install, `npx` fetches the latest release, so a
+compromised publish would run on the next sync; a global install freezes the
+version until it's upgraded on purpose, after reviewing the new release.
+`--before` keeps transitive deps off fresh (not yet vetted) releases too.
 
 This only pins the CLIs. `skills update` still pulls the latest content of
-third-party skills, which agents then follow — review those diffs.
+third-party skills, which agents then follow — review those diffs. A source
+pinned as `owner/repo#<tag>` stays on that tag.
 
 Under nvm, global packages are per Node version: reinstall after switching.
 
