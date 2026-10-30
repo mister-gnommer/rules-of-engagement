@@ -4,10 +4,10 @@
 When spinning up subagents I haven't explicitly requested, use the lowest-cost model tier that reliably achieves the result — a judgment call, not always the cheapest.
 
 Tiers (use whichever models the current tool offers):
-- **Low**: e.g. haiku, Composer 2.5, DeepSeek V4 Flash, Opencode Bigpickle
-- **Middle** (medium/high thinking): e.g. sonnet, DeepSeek V4 Pro, Qwen 3.6Plus, Kimi K2.6, MiniMax M2.7
-- **High**: middle models on MAX thinking, e.g. GLM-5.2, Grok 4.5, Qwen3.7 Max
-- **Top**: e.g. opus, fable, Kimi K3, GPT 5.5 Sol — only when I explicitly ask for a higher tier or name the model, or when the task clearly demands it.
+- **Low**: e.g. haiku, GPT 6 Luna, Composer 2.5, DeepSeek V4 Flash, Opencode Bigpickle
+- **Middle** (medium/high thinking): e.g. sonnet, GPT 6.1 Terra, DeepSeek V4 Pro, Qwen 3.6Plus, Kimi K2.6, MiniMax M2.7
+- **High**: middle models on MAX thinking, e.g. GPT 6.1 Sol, GLM-5.2, Grok 4.5, Qwen3.7 Max
+- **Top**: e.g. opus, fable, Kimi K3, GPT 6 Astra — only when I explicitly ask for a higher tier or name the model, or when the task clearly demands it.
 
 Subagents may not see these rules, so every brief must tell the subagent how to handle surprising findings:
 - **Return early** with partial work when a finding invalidates the task (wrong premise, approach can't work, much larger scope) or continuing risks something irreversible.
