@@ -1,6 +1,6 @@
 ---
 name: grill-me-with-ledger
-ver: 2
+ver: 3
 description: A relentless interview (grilling) that offers lettered-choice bulk replies and keeps a running decision ledger. Use when you want a grilling session whose decisions are recorded.
 disable-model-invocation: true
 ---
@@ -10,6 +10,10 @@ Run the `grilling` skill first (the skill whose `name` is `grilling`) and follow
 ## Lettered choices for bulk replies
 
 When a question has a closed set of answers (finite, mutually exclusive options), list them as lettered choices (**A** / **B** / **C** / **D** …) so I can reply in bulk like `1 A, 2 A, 3 C`. Prefer this whenever the options are naturally closed; skip lettering for open-ended questions.
+
+## Question numbering
+
+Number questions in one increasing sequence for the whole session, never restarting per round; if questions get dropped (e.g. made irrelevant), leave the gaps. When a new session starts and the project already has a ledger, ask whether to continue it (resume after its highest Q number) or start a new ledger with a fresh sequence.
 
 ## Grilling ledger
 
