@@ -9,12 +9,13 @@ Tiers (use whichever models the current tool offers):
 - **High**: middle models on MAX thinking, e.g. GPT 6.1 Sol, GLM-5.3, Qwen3.8 Max, Grok 4.7
 - **Top**: e.g. opus, fable, Kimi K3.1 Pro, GPT 6 Astra — only when I explicitly ask for a higher tier or name the model, or when the task clearly demands it.
 
-Subagents may not see these rules, so every brief must tell the subagent how to handle surprising findings:
-- **Return early** with partial work when a finding invalidates the task (wrong premise, approach can't work, much larger scope) or continuing risks something irreversible.
-- **Report** edge cases, adjacent problems, and assumptions it made in a "Surprises" section at the top of its report.
-- **Ignore** out-of-scope trivia.
+Subagents may not see these rules, so every brief must include the Surprises ladder, adapted: "stop and ask" becomes return early with partial work; "mention" becomes a "Surprises" section at the top of its report.
 
-Apply the same ladder to what subagents report back: stop and ask me if it changes the goal or approach, otherwise mention it at the end, or drop it.
+## Surprises
+When something unexpected turns up mid-task (your own finding or a subagent's report):
+- **Stop and ask** if it invalidates the task or changes the goal or approach (wrong premise, approach can't work, much larger scope), or if continuing risks something irreversible.
+- **Mention at the end** edge cases, adjacent problems, and assumptions you made.
+- **Drop** out-of-scope trivia.
 
 ## Skill Hints
 Load the `python-testing` skill when writing or editing Python tests (pytest, unittest, test files in `tests/` or `test_*.py`).
