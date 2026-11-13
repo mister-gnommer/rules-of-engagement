@@ -1,7 +1,7 @@
 ---
 name: sync-setup
-ver: 4
-description: Syncs this machine's core rules wiring with the rules-of-engagement repo, updates all installed skills, and optionally installs the user's listed third-party skills and MCP servers. Use only when the user invokes /sync-setup.
+ver: 5
+description: Syncs this machine's core rules wiring with the rules-of-engagement repo, updates all installed skills, and optionally installs the user's listed third-party skills and MCP servers and applies the secrets hardening. Use only when the user invokes /sync-setup.
 disable-model-invocation: true
 ---
 
@@ -111,7 +111,30 @@ opencode() {
 
 On macOS use `security find-generic-password -s <keyring> -w`. Tell the user it only works when OpenCode is started from a terminal.
 
-## 6. Report
+## 6. Secrets hardening
+
+Skip this step silently if `$REPO/lists/hardening.md` doesn't exist. Check only installed tools. Compare each tool's config with the file's three lists and note what's missing for the report. Change nothing in this step, and never read a listed path to test a rule: test with dummy files.
+
+Expected config, one entry per list item (`<path>` = credential path without its trailing `/`, `<name>` = env file, `<var>` = token env var):
+
+- **Claude Code** (`~/.claude/settings.json`):
+  - `permissions.deny`: `Read(<path>)` for a file, `Read(<path>/**)` for a directory, `Read(**/<name>)`.
+  - `sandbox.enabled: true`. When adding the `sandbox` key, also set `autoAllowBashIfSandboxed: false`, so commands keep prompting; leave an existing value alone.
+  - `sandbox.credentials.files`: `{"path": "<path>", "mode": "deny"}`.
+  - `sandbox.credentials.envVars`: `{"name": "<var>", "mode": "deny"}`.
+- **Codex** (`~/.codex/config.toml`):
+  - Top-level `default_permissions = "locked"`, above every table. If `sandbox_mode` is set, ask: the two can't be combined.
+  - `[permissions.locked]`: `extends = ":workspace"`.
+  - `[permissions.locked.filesystem]`: `"<path>" = "none"`.
+  - `[permissions.locked.filesystem.":workspace_roots"]`: `"**/<name>" = "none"`.
+  - `[shell_environment_policy]`: `inherit = "all"`, `ignore_default_excludes = true`, `exclude = [<vars>]`.
+  - Test after applying: in a scratch dir with a dummy `.env`, `codex sandbox cat .env` must fail.
+- **OpenCode** (`~/.config/opencode/opencode.json`): it has no sandbox and can't filter env vars, so these rules only stop its read tool; shell commands get around them. Say so in the report.
+  - `permissions`: `{"action": "read", "resource": "<path>", "effect": "deny"}`, plus `<path>/*` for a directory, and `*/<name>`.
+  - `policies`: the same rules as `{"action": "tool.use", "resource": "read:<resource>", "effect": "deny"}`, with `~` written out as the home dir.
+  - Test after applying: `opencode debug config | grep -viE 'authorization|bearer'` loads without errors.
+
+## 7. Report
 
 Keep it short. Include:
 
@@ -122,6 +145,7 @@ Keep it short. Include:
   - whether to install the missing ones: one `skills add <source> -g -y -s <names...> -a <agents...>` per source, agents as above. Default: skip, since not every machine needs every skill.
   - whether to add the unlisted ones to `$REPO/lists/skills.md`. If yes, add the rows (keep the table sorted) and leave the change uncommitted; mention it needs a commit and push.
 - MCP differences from step 5, plain-text tokens first. Once everything else is done, ask per server whether to install or fix it, wired as step 5 says, and whether to add unlisted ones to `$REPO/lists/mcps.md` (same rules as the skills list). Default: skip.
+- hardening gaps from step 6, per tool. Once everything else is done, ask per tool whether to apply them. Add what's missing and keep what's already there. Default: skip.
 - reload notes:
   - Claude Code picks up rules on a new session or `/compact`, and skills on a new session.
   - OpenCode picks up rules on the next request, and skills on restart.

@@ -69,6 +69,9 @@ Lines starting with `>>` (e.g. `//>> do X`, `#>> check this`) are inline instruc
 ## Git
 Never run `git commit`, `git push`, or `git add` (or any equivalent staging, e.g. `git mv`) unless I explicitly ask for it.
 
+## Secrets
+Never write secret values into commands, files, or chat: refer to them by env var name. Project secrets live in a gitignored `.env` you don't read; for global ones (tool and MCP tokens) suggest the OS keyring.
+
 ## Dates
 Always use `yyyy-MM-dd` format for dates in UI, code, and data. For file and directory names use `yyyyMMdd` (no separators).
 

@@ -11,7 +11,8 @@ projects and harnesses). It holds:
 - `core/` — global always-applied rules, read from a local clone at
   `~/Prog/projects/rules-of-engagement` (never fetched from the web).
 - `lists/` — what the creator uses everywhere: third-party skills
-  (`skills.md`) and MCP servers (`mcps.md`). Read only by the `sync-setup`
+  (`skills.md`), MCP servers (`mcps.md`) and what agents are kept away
+  from (`hardening.md`). Read only by the `sync-setup`
   skill from the local clone; kept outside `skills/` so installing
   `sync-setup` doesn't push these lists on anyone.
 - `bin/` — helper scripts, symlinked into `~/.local/bin`. `mcp-headers`
