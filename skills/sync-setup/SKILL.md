@@ -1,6 +1,6 @@
 ---
 name: sync-setup
-ver: 5
+ver: 6
 description: Syncs this machine's core rules wiring with the rules-of-engagement repo, updates all installed skills, and optionally installs the user's listed third-party skills and MCP servers and applies the secrets hardening. Use only when the user invokes /sync-setup.
 disable-model-invocation: true
 ---
@@ -113,22 +113,28 @@ On macOS use `security find-generic-password -s <keyring> -w`. Tell the user it 
 
 ## 6. Secrets hardening
 
-Skip this step silently if `$REPO/lists/hardening.md` doesn't exist. Check only installed tools. Compare each tool's config with the file's three lists and note what's missing for the report. Change nothing in this step, and never read a listed path to test a rule: test with dummy files.
+Skip this step silently if `$REPO/lists/hardening.md` doesn't exist. Check only installed tools. Compare each tool's config with the file's lists and note what's missing for the report. Change nothing in this step, and never read a listed path to test a rule: test with dummy files.
 
-Expected config, one entry per list item (`<path>` = credential path without its trailing `/`, `<name>` = env file, `<var>` = token env var):
+Expected config, one entry per list item (`<path>` = credential path without its trailing `/`, `<name>` = env file, `<var>` = token env var, `<host>` = allowed host, `<cmd>` = command run outside the sandbox):
 
 - **Claude Code** (`~/.claude/settings.json`):
   - `permissions.deny`: `Read(<path>)` for a file, `Read(<path>/**)` for a directory, `Read(**/<name>)`.
   - `sandbox.enabled: true`. When adding the `sandbox` key, also set `autoAllowBashIfSandboxed: false`, so commands keep prompting; leave an existing value alone.
   - `sandbox.credentials.files`: `{"path": "<path>", "mode": "deny"}`.
   - `sandbox.credentials.envVars`: `{"name": "<var>", "mode": "deny"}`.
+  - `sandbox.network.allowedDomains`: `"<host>"`.
+  - `sandbox.excludedCommands`: `"<cmd> *"`.
+  - `env`: `GIT_ASKPASS: ""`, `GIT_TERMINAL_PROMPT: "0"`.
 - **Codex** (`~/.codex/config.toml`):
   - Top-level `default_permissions = "locked"`, above every table. If `sandbox_mode` is set, ask: the two can't be combined.
   - `[permissions.locked]`: `extends = ":workspace"`.
   - `[permissions.locked.filesystem]`: `"<path>" = "none"`.
   - `[permissions.locked.filesystem.":workspace_roots"]`: `"**/<name>" = "none"`.
-  - `[shell_environment_policy]`: `inherit = "all"`, `ignore_default_excludes = true`, `exclude = [<vars>]`.
-  - Test after applying: in a scratch dir with a dummy `.env`, `codex sandbox cat .env` must fail.
+  - `[permissions.locked.network]`: `enabled = true`. It can't filter by host without an experimental feature, so `<host>` isn't used.
+  - Linux: `"<bus>" = "none"` in `[permissions.locked.filesystem]`, `<bus>` = the socket path in `$DBUS_SESSION_BUS_ADDRESS` (usually `/run/user/<uid>/bus`). Network on also opens unix sockets, and this one leads to the keyring.
+  - `[shell_environment_policy]`: `inherit = "all"`, `ignore_default_excludes = true`, `set = { GIT_ASKPASS = "", GIT_TERMINAL_PROMPT = "0" }`, `exclude = [<vars>]`.
+  - With any deny rule, an approved escalation stays in the sandbox (openai/codex#33349), so `<cmd>` can't be applied and Codex can't push. Say so in the report.
+  - Test after applying, in a scratch dir with a dummy `.env`: `codex sandbox cat .env` and `codex sandbox gh auth status` must fail, `codex sandbox curl -sI https://github.com` must succeed.
 - **OpenCode** (`~/.config/opencode/opencode.json`): it has no sandbox and can't filter env vars, so these rules only stop its read tool; shell commands get around them. Say so in the report.
   - `permissions`: `{"action": "read", "resource": "<path>", "effect": "deny"}`, plus `<path>/*` for a directory, and `*/<name>`.
   - `policies`: the same rules as `{"action": "tool.use", "resource": "read:<resource>", "effect": "deny"}`, with `~` written out as the home dir.

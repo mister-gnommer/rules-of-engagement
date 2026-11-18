@@ -49,3 +49,24 @@ Removed from the environment of commands the agent runs. AWS variables are left 
 - `ANTHROPIC_API_KEY`
 - `OPENAI_API_KEY`
 - `NPM_TOKEN`
+
+## Network and keyring
+
+Sandboxed commands get network but not the OS keyring: they can install and fetch, but can't use a stored token.
+
+Hosts allowed without asking, where the tool filters by host:
+
+- `github.com`
+- `api.github.com`
+- `*.githubusercontent.com`
+- `registry.npmjs.org`
+- `pypi.org`
+- `files.pythonhosted.org`
+
+Commands that need a keyring token, run outside the sandbox where the tool can do that:
+
+- `git push`
+- `git pull`
+- `git fetch`
+
+Commands the agent runs get `GIT_ASKPASS=""` and `GIT_TERMINAL_PROMPT=0`, so a git command without a token fails at once instead of opening a desktop password dialog.
